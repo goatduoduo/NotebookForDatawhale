@@ -1,28 +1,42 @@
 def find_solution(ops, limits, target, solution):
     if target == 0:
-        return True
+        filter_best_solution(solution)
+        return
     if not ops or not limits:
-        return False
+        return
     op = ops[0]
     limit = limits[0]
-    for i in range(0, limit + 1):
-        target += op
+    # 开始迭代
+    for i in range(1, limit):
+        temp = target + op * i
         solution.append(op)
-        if find_solution(ops[1:], limits[1:], target, solution):
-            return True
-        target -= op
+        find_solution(ops[1:], limits[1:], temp, solution)
+    for i in range(1, limit):
         solution.pop()
-    return False
 
-ops = [28,22,16,56,-19,-29,-37,-47]
-limits = [11,11,6,8,9,8,9,6]
-target = -28
+    # 如果第一个就是0
+    find_solution(ops[1:], limits[1:], target, solution)
+    return
+
+
+def filter_best_solution(temp_solution):
+    global best_solution
+    if not best_solution:
+        best_solution = temp_solution[:]
+        print("找到了可行解：", best_solution)
+    if len(temp_solution) < len(best_solution):
+        best_solution = temp_solution[:]
+        print("找到了可行解：", best_solution)
+
+
+ops = [28, 6, 12, 34, -11, -29, -37, -31]
+limits = [3, 3, 3, 3, 3, 3, 3, 3]
+target = -57
 solution = []
+best_solution = []
 
-if find_solution(ops, limits, target, solution):
-    print("找到了可行解：", solution)
-    for i in solution:
-        target += i
-    print("验算："+target.__str__())
-else:
-    print("没有找到可行解")
+find_solution(ops, limits, target, solution)
+print("找到了最优解：", best_solution)
+for i in best_solution:
+    target += i
+print("验算：" + target.__str__())
