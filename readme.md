@@ -16,7 +16,8 @@
 
 ### 吃瓜教程
 
-
+* [第1章 绪论](/吃瓜教程/第1章-绪论.md)
+* 
 ### 深度学习
 
 * [Pycharm配置Miniconda3](/深度学习/notes/Pycharm配置Miniconda3.md)
