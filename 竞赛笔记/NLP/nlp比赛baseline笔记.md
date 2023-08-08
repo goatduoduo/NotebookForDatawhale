@@ -74,6 +74,80 @@ def simple_feature(s):
     ])
 ```
 
+但是我始终认为真的不是在做NLP，至少来说只是以全局的角度去创造特征工程
+
 ### TF-IDF特征
 
-施工中，这才是真正的NLP算法
+TF-IDF (Term Frequency-Inverse Document Frequency) 词频-逆文档频率
+
+它是一种常用的文本特征表示方法，用于衡量一个词在文本中的重要性。TF-IDF结合了词频（TF）和逆文档频率（IDF），用于对每个词赋予一个**权重**，从而将文本数据转换为**数值形式**，便于在机器学习算法中使用。
+
+所以依然，单词必须转换成数字才能够被运算。
+
+重要的概念有：
+
+1. 词频（Term Frequency, TF）：某个词在文本中出现的频率。TF=词在文档中出现的次数 / 文档中的总词数，词频越高越重要
+2. 逆文档频率（Inverse Document Frequency, IDF）衡量稀有程度，通过对整个文本数据集中包含该词的数量进行**倒数**处理，再取**对数**得到值。 $IDF=\log\frac{文本数据集中总文档数}{包含词word的文档数 + 1}$ 即稀有度越高，区分性越好
+3. TF-IDF 它是TF和IDF的乘积，用于综合考虑一个词在文本中的频率和在整个数据集中的稀有程度。将词频和逆文档频率结合起来，突出每个词对文本的**重要性**。
+
+
+#### Why TF-IDF
+
+TF-IDF在文本分类、信息检索、搜索引擎以及文本挖掘任务里广泛应用，能够有效对文本进行特征表示，以捕捉文本的重要信息，进而提高文本分类和相关任务性能。
+
+#### How TF-IDF
+
+使用“TfidfVectorizer”，位于scikit-learn库中用于将文本数据转换为TF-IDF特征表示的工具。它是一个方便而强大的文本特征提取器。下面介绍一些常用的TfidfVectorizer中的参数：
+
+1. stop_words（默认为None）：停用词列表。停用词是那些在文本处理中经常被过滤掉的常见词汇，例如"a"、"the"、"and"等。可以传入一个列表，其中包含要过滤的停用词，TfidfVectorizer会自动在处理文本时忽略这些词汇。
+2. max_df（默认为1.0）：用于设置词频的阈值。表示忽略在文档中出现频率超过max_df的词汇。可以是绝对的词频计数，也可以是相对的词频比例（例如0.8表示忽略在80%以上的文档中出现的词汇）。
+3. min_df（默认为1）：用于设置词频的下限。表示忽略在文档中出现频率低于min_df的词汇。可以是绝对的词频计数，也可以是相对的词频比例。
+4. max_features（默认为None）：指定最大特征数。根据TF-IDF值对所有特征进行排序，选择TF-IDF值最大的前max_features个特征。
+5. ngram_range（默认为(1, 1)）：指定要考虑的n-gram范围。n-gram是连续的n个词组成的序列。例如，ngram_range=(1, 2)表示同时考虑单个词和相邻的两个词的组合。
+6. norm（默认为'l2'）：用于对特征向量进行归一化的方式。'l2'表示欧几里得范数（即将向量缩放到单位范数），'l1'表示曼哈顿范数，None表示不归一化。
+7. use_idf（默认为True）：是否使用逆文档频率（IDF）。如果为True，则计算TF-IDF特征；如果为False，则只计算TF特征。
+8. smooth_idf（默认为True）：是否平滑逆文档频率（IDF）。如果为True，则在计算IDF时避免除以0，避免出现无穷大值。
+9. sublinear_tf（默认为False）：是否使用子线性TF缩放。如果为True，则使用1 + log(TF)来替代普通的TF计算。
+
+在baseline中做的方法是使用不同的TF-IDF参数进行提取并且尝试训练模型。
+
+第一种TF-IDF参数训练
+
+```python
+# 使用第1种TF-IDF参数进行特征提取
+tfidf = TfidfVectorizer(token_pattern=r'\w{1}', max_features=2000) # 初始化TF-IDF向量化器，设置单词的最小长度为1，最大特征数量为2000
+train_tfidf = tfidf.fit_transform(train_data['content']) # 将训练数据的内容列转换为TF-IDF特征
+test_tfidf = tfidf.transform(test_data['content']) # 将测试数据的内容列转换为TF-IDF特征
+```
+
+第二种TF-IDF参数训练
+
+```python
+tfidf = TfidfVectorizer(token_pattern=r'\w{1}', max_features=5000) # 初始化TF-IDF向量化器，设置单词的最小长度为1，最大特征数量为5000
+train_tfidf = tfidf.fit_transform(train_data['content']) # 将训练数据的内容列转换为TF-IDF特征
+test_tfidf = tfidf.transform(test_data['content']) # 将测试数据的内容列转换为TF-IDF特征
+```
+
+第三种TF-IDF参数训练
+```python
+tfidf = TfidfVectorizer(token_pattern=r'\w{1}', max_features=5000, ngram_range=(1,2)) # 初始化TF-IDF向量化器，设置单词的最小长度为1，最大特征数量为5000，n-gram范围为1到2
+train_tfidf = tfidf.fit_transform(train_data['content']) # 将训练数据的内容列转换为TF-IDF特征
+test_tfidf = tfidf.transform(test_data['content']) # 将测试数据的内容列转换为TF-IDF特征
+```
+
+这三种区别在于**最大特征数量**和**单词的最小长度**这两个参数，然后训练模型之后预测和测试的代码都是一样的。
+
+```python
+# 使用交叉验证进行预测，并打印分类报告
+print(classification_report(
+    cross_val_predict(
+        LogisticRegression(), # 使用逻辑回归模型
+        train_tfidf, # 训练数据的特征
+        train_data['label'], # 训练数据的标签
+    ),
+    train_data['label'], # 真实的训练数据标签
+    digits=4 # 设置打印的小数位数为4
+))
+```
+这个测试模型的得分在 0.9127,有一定的准确度，但是可能还要继续优化。
+
