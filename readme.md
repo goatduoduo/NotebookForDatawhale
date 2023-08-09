@@ -31,6 +31,8 @@
 第二期：NLP-识别来自AIGC的威胁
 
 * [NLP baseline学习](/竞赛笔记/NLP/nlp比赛baseline笔记.md)
+* [NLP 强化baseline](/竞赛笔记/NLP/深度学习改进型baseline笔记.md)
+
 
 ### 深度学习
 
