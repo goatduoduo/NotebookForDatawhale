@@ -33,6 +33,9 @@
 * [NLP baseline学习](/竞赛笔记/NLP/nlp比赛baseline笔记.md)
 * [NLP 强化baseline](/竞赛笔记/NLP/深度学习改进型baseline笔记.md)
 
+第三期：机器学习-用户新增预测
+
+* [最初的baseline](/竞赛笔记/机器学习/用户新增预测baseline笔记.md)
 
 ### 深度学习
 
