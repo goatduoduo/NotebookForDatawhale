@@ -126,4 +126,122 @@ clf.fit(
 
 训练模型使用的是lightGBM，用的是**决策树**的训练方法？
 
-什么，你不知道决策树？
+什么，你不知道决策树，简单来说就是通过机器学习算法构建一个能够依据特征分类的树形结构啦。
+
+## 数据分析和可视化
+
+```py
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+train_data = pd.read_csv('data/用户新增预测挑战赛公开数据/train.csv')
+test_data = pd.read_csv('data/用户新增预测挑战赛公开数据/test.csv')
+
+# 相关性热力图
+sns.heatmap(train_data.drop(['udmap'],axis=1).corr().abs(), cmap='YlOrRd')
+```
+![可视化](../../img/keshihua1.png)
+
+我发现**common_ts和x6**以及**x7和x8**两者的热力相关性非常高，很有必要对这两者继续做文章！
+
+我们认为很有必要分析一下X1-X8到底有哪些取值，然后我们开始这么做了。
+
+```py
+sns.barplot(x='x1', y='target', data=train_data)
+```
+我们会做8次，从x1-x8，然后看看结果分别是什么？
+
+#### X1-target
+
+![可视化](../../img/x1.png)
+
+#### X2-target
+
+![可视化](../../img/x2.png)
+
+#### X3-target
+
+![可视化](../../img/x3.png)
+
+#### X4-target
+
+![可视化](../../img/x4.png)
+
+#### X5-target
+
+![可视化](../../img/x5.png)
+
+#### X6-target
+
+![可视化](../../img/x6.png)
+
+#### X7-target
+
+![可视化](../../img/x7.png)
+
+#### X8-target
+
+![可视化](../../img/x8.png)
+
+- 字段x1至x8为用户相关的属性，为匿名处理字段。添加代码对这些数据字段的取值分析，那些字段为数值类型？那些字段为类别类型？
+
+数值类型：
+- x3
+- x4
+- x5
+类别类型：
+- x1
+- x2
+- x6
+- x7
+- x8
+
+特殊的，X8我肯定它是**bool**类型的
+
+这些图的细线代表的是误差条，关于误差条的说明在这里：https://zhuanlan.zhihu.com/p/584007819
+
+在这里是95%的置信区间（Ci）
+
+- 对common_ts提取小时后再尝试进行可视化：
+
+```py
+train_data['common_ts'] = pd.to_datetime(train_data['common_ts'], unit='ms')
+train_data['common_ts_hour'] = train_data['common_ts'].dt.hour
+sns.barplot(x='common_ts_hour', y='target', data=train_data)
+```
+![可视化](../../img/timekeshihua.png)
+
+初步推测在8-15点更有可能是新增用户。
+
+
+尝试进行onehot之后，对标签进行匹配
+
+```py
+def udmap_onehot(d):
+    v = np.zeros(9)
+    if d == 'unknown' :
+        return v
+    
+    d = eval(d)
+    for i in range(1,10):
+        if 'key' + str(i) in d:
+            v[i-1] = d['key' + str(i)]
+
+    return v
+
+train_udmap_df = pd.DataFrame(np.vstack(train_data['udmap'].apply(udmap_onehot)))
+train_udmap_df.columns = ['key' + str(i) for i in range(1,10)]
+train_data = pd.concat([train_data, train_udmap_df], axis=1)
+sns.barplot(x='key1', y='target', data=train_data)
+```
+
+从x1对target的情况如下：
+
+![可视化](../../img/key1.png)
+
+不得不说特定值确实可以达到100%，但是看着很难分析到有效的信息？？？
+
+
+## 交叉验证

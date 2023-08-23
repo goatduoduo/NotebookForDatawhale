@@ -44,3 +44,8 @@
 ### 深度学习
 
 * [Pycharm配置Miniconda3](/深度学习/notes/Pycharm配置Miniconda3.md)
+
+```
+conda activate d2l
+jupyter notebook
+```
