@@ -497,3 +497,4 @@ test_data['x4_freq'] = test_data['x4'].map(train_data['x4'].value_counts())
 **0.73378** > 0.62684
 
 一个良好的特征工程确实能够有效提升得分，尽管可能还不够。
+
