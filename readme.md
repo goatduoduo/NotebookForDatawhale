@@ -46,6 +46,10 @@
 
 * [Pycharm配置Miniconda3](/深度学习/notes/Pycharm配置Miniconda3.md)
 
+### “简单”学大模型
+
+* [01 引言](/《简单》学点大模型/01引言.md)
+
 ```
 conda activate d2l
 jupyter notebook
