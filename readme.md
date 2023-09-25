@@ -64,6 +64,7 @@
 ### 部署大模型
 
 * [猫狗对抗模型](/用免费GPU线上跑AI项目实践/猫狗对抗.md)
+* [ChatGLM模型](/用免费GPU线上跑AI项目实践/ChatGLM.md)
 
 ```
 conda activate d2l
