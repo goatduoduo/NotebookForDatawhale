@@ -67,7 +67,6 @@
 * [ChatGLM模型](/用免费GPU线上跑AI项目实践/ChatGLM.md)
 * [Stable Diffusion](/用免费GPU线上跑AI项目实践/StableDiffusion.md)
 
-```
-conda activate d2l
-jupyter notebook
-```
+### 动手学大模型开发
+
+* [大模型简介](/动手学大模型开发/大模型简介.md)
