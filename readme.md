@@ -88,4 +88,4 @@
   
 ### AI冬令营
 * [秋妃传](/AI冬令营/01.秋妃传.md)
-* [朵朵的Rustacean](/AI冬令营/02.朵朵的Rustacean.md)
+* [朵朵的Rustacean_test](/AI冬令营/02.朵朵的Rustacean.md)
