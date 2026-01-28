@@ -86,6 +86,10 @@
 * [金融市场基础概念](/Whale_Quant/02金融市场基础概念.md)
 * [股票数据获取](/Whale_Quant/03股票数据获取.ipynb)
   
-### AI冬令营
-* [秋妃传](/AI冬令营/01.秋妃传.md)
-* [朵朵的Rustacean_test](/AI冬令营/02.朵朵的Rustacean.md)
+### BaseLLm
+* [Seq2Seq与注意力机制](/BaseLLm/Seq2Seq与注意力机制.md)
+* [BertGptT5](/BaseLLm/BertGpt和T5.md)
+* [手搓一个大模型](/BaseLLm/手搓一个大模型.md)
+* [参数高效微调](/BaseLLm/参数高效微调.md)
+* [高级微调技术](/BaseLLm/高级微调技术.md)
+* [模型数量级化实现](/BaseLLm/模型数量级化实现.md)
